@@ -1,0 +1,32 @@
+<div class="col-md-6">
+    <div class="panel panel-primary resetPadding">
+
+        <div class="panel-heading">
+            <div class="panel-title">
+                <div class="col-md-6">Orders</div>
+                <div class="col-md-6">Description</div>
+                <span class="clearfix"></span>
+            </div>
+        </div>
+
+        <ul>
+            <li ng-repeat="order in vm.orders"
+                dnd-draggable="order"
+                dnd-moved="vm.moved(order, $index)"
+                class="border pointer">
+
+                <span class="col-md-6">
+                    {{order.orderName}}
+                </span>
+
+                <span class="col-md-6">
+                    {{order.name}}
+                </span>
+                <span class="clearfix"></span>
+
+            </li>
+        </ul>
+
+    </div>
+
+</div>
