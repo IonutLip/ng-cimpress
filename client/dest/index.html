@@ -5,14 +5,15 @@
         <title>Cimpress</title>
         <!-- inject:css -->
         <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
-        <link rel="stylesheet" href="/dest/content/css/style.css">
+        <link rel="stylesheet" href="/dest/style.css">
         <!-- endinject -->
     </head>
 
-    <body ng-app="app" class='container '>
-        <header-panel></header-panel>
-        <div ng-view></div>
+    <body ng-app="app" class='container'>
 
+        <nav-bar></nav-bar>
+
+        <div ui-view></div>
 
         <!-- inject:js -->
         <script src="/bower_components/angular/angular.js"></script>
@@ -21,8 +22,11 @@
         <script src="/bower_components/angular-animate/angular-animate.js"></script>
         <script src="/bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js"></script>
         <script src="/bower_components/jquery-ui/jquery-ui.js"></script>
+        <script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <script src="/dest/js/all.js"></script>
+        <script src="/dest/js/templates.js"></script>
         <!-- endinject -->
     </body>
 

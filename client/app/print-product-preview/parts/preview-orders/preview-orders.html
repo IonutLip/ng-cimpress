@@ -1,0 +1,33 @@
+<div class="panel panel-primary resetPadding">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <div class="col-md-3">Order</div>
+            <div class="col-md-3">item</div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <ul>
+        <li class="border pointer"
+            ng-repeat="order in vm.ordersPrinter">
+                <span class="col-md-3">
+                    {{order.orderName}}
+                </span>
+                <span class="col-md-3">
+                    {{order.name}}
+                </span>
+                <span class="col-md-3">
+                    <button type="button" class="btn btn-primary"
+                            ng-click="vm.openModal(order)">
+                        Preview
+                    </button>
+                </span>
+                <span class="col-md-3">
+                    <button type="button" class="btn btn-default"
+                            ng-click="vm.reprintOrder(order,$index)">
+                        Re-print
+                    </button>
+                </span>
+            <span class="clearfix"></span>
+        </li>
+    </ul>
+</div>

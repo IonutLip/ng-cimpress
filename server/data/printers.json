@@ -1,7 +1,17 @@
 {"printers":
     [
-        {"line":"Production Line 1"},
-        {"line":"Production Line 2"},
-        {"line":"Production Line 3"}
+        {
+            "line":"Production Line 1",
+            "link":"Line1"
+        },
+        {
+            "line":"Production Line 2",
+            "link":"Line2"
+        },
+        {
+            "line":"Production Line 3333",
+            "link":"Line33333"
+        }
+
     ]
 }

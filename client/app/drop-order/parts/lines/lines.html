@@ -1,0 +1,17 @@
+<div class="col-md-6">
+    <div class="panel panel-primary resetPadding">
+        <div class="panel-heading">
+            <div class="panel-title">
+                Printers line
+            </div>
+        </div>
+        <ul>
+            <li class="border pointer"
+                ng-repeat="printer in vm.printers">
+                <a ui-sref="dropOrder.printer({id: printer.link})">
+                    {{printer.line}}
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

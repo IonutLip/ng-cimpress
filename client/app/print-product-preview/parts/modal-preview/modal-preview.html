@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="vm.cancel()">&times;</button>
+    <h4 class="modal-title">Preview order item</h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="http://localhost:8182/dest/img/phone.jpg"/>
+        </div>
+        <div class="col-md-6">
+            <ul>
+                <li ng-repeat="label in vm.labels">
+                    {{label.name}}
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+    <button class="btn btn-primary" type="button"
+            ng-click="vm.sendOnPrint(order)">
+        Print
+    </button>
+</div>
+

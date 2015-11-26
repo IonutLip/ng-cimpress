@@ -1,0 +1,31 @@
+<div class="panel panel-primary resetPadding">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <div class="col-md-3">Orders</div>
+            <div class="col-md-3">Description</div>
+            <div class="col-md-3"></div>
+            <span class="clearfix"></span>
+        </div>
+    </div>
+    <ul>
+        <li ng-repeat="order in vm.ordersParcels"
+            dnd-draggable="order"
+            dnd-moved="vm.moved(order, $index)"
+            class="border">
+                <span class="col-md-3">
+                    {{order.orderName}}
+                </span>
+                <span class="col-md-3">
+                    {{order.name}}
+                </span>
+                <span class="col-md-3">
+                   <button type="button" class="btn btn-primary"
+                           data-toggle="modal"
+                           ng-click="vm.openModal(order)">
+                       Create parcel
+                   </button>
+                </span>
+            <span class="clearfix"></span>
+        </li>
+    </ul>
+</div>
