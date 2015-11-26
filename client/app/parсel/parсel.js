@@ -1,9 +1,9 @@
 (function () {
-    angular.module('app')
-        .controller('parcelCtrl', parcelCtrl);
+    angular.module('app.parcel.module')
+        .controller('Parcel', Parcel);
 
     /* @ngInject */
-    function parcelCtrl($scope, $rootScope, dataservices, $uibModal) {
+    function Parcel($scope, $rootScope, dataservices, $uibModal) {
         var vm = this;
 
         dataservices.getOrders().then(function (responce) {
@@ -19,11 +19,13 @@
         function shippedParcel() {
 
         }
+
         function printParcels() {
-          
+
         }
+
         function openParcel() {
-          
+
         }
 
         function openModal(order) {
@@ -31,14 +33,14 @@
             getOrderById(order).then(
                 getOrderFnSuccess
             );
-            function getOrderFnSuccess(responce){
+            function getOrderFnSuccess(responce) {
                 vm.modalInstance = $uibModal.open({
-                    animation:true,
+                    animation: true,
                     templateUrl: 'modal-parcel.html',
-                    controller: 'modalCtrl as vm',
-                    size:'lg',
+                    controller: 'modalParcel as vm',
+                    size: 'lg',
                     resolve: {
-                        data:{
+                        data: {
                             items: responce.data,
                             name: order.orderName
                         }

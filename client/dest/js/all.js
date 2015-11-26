@@ -15,66 +15,68 @@
     angular.module('app.parcel.module', []);
 }());
 (function () {
-    angular.module('app.print-product-preview.module', []);
+    angular.module('app.print-preview.module', []);
 }());
 (function () {
     angular.module('app.productions-label.module', []);
 }());
 (function () {
+    angular.module('app.shipping', []);
+}());
+(function () {
     angular.module('app',
         [
             'app.core',
+
             'app.drop-order.module',
             'app.parcel.module',
-            'app.print-product-preview.module',
+            'app.print-preview.module',
             'app.productions-label.module'
         ])
         .config(
             /* @ngInject */
             ["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
                 $stateProvider
-
-                    .state('Print-product-preview', {
-                        abstract: true,
-                        url: "/Print-product-preview",
-                        controller: "printProductPreviewCtrl as vm",
-                        template: "<ui-view/>"
-                    })
-                    .state('Print-product-preview.orders', {
-                        url: "/orders",
-                        template: "<preview-orders></preview-orders>"
-                    })
-
-                    .state('Parcel', {
-                        abstract: true,
-                        url: "/Parcel",
-                        controller: "parcelCtrl as vm",
-                        template: "<ui-view/>"
-                    })
-                    .state('Parcel.create', {
-                        url: "/orders",
-                        template: "<parcels-orders></parcels-orders>"
-                    })
-                    .state('Parcel.overview', {
-                        url: "/overview",
-                        template: "<overview-parcels></overview-parcels>"
-                    })
-
                     .state('dropOrder', {
                         abstract: true,
                         url: "/Drop-order",
-                        controller: "dropOrderCtrl as vm",
+                        controller: "DropOrder as vm",
                         templateUrl: "drop-order.html"
                     })
                     .state('dropOrder.printers', {
                         url: "/printers",
-                        template: "<lines></lines>"
+                        template: "<cm-lines></cm-lines>"
                     })
                     .state('dropOrder.printer', {
                         url: "/printers/:id",
-                        templateUrl: "printer.html"
-                    });
+                        template: "<cm-printer></cm-printer>"
+                    })
 
+                    .state('Print-product-preview', {
+                        abstract: true,
+                        url: "/Print-product-preview",
+                        controller: "PrintProductPreview as vm",
+                        template: "<ui-view/>"
+                    })
+                        .state('Print-product-preview.orders', {
+                            url: "/orders",
+                            template: "<cm-preview-orders></cm-preview-orders>"
+                        })
+
+                    .state('Parcel', {
+                        abstract: true,
+                        url: "/Parcel",
+                        controller: "Parcel as vm",
+                        template: "<ui-view/>"
+                    })
+                        .state('Parcel.create', {
+                            url: "/create",
+                            template: "<cm-parcels-orders></cm-parcels-orders>"
+                        })
+                        .state('Parcel.overview', {
+                            url: "/overview",
+                            template: "<cm-overview-parcels></cm-overview-parcels>"
+                        });
 
                 $urlRouterProvider
                     .otherwise('/Drop-order/printers/');
@@ -121,7 +123,6 @@
             getOrders: getOrders,
             getOrder1: getOrder1,
             getOrder2: getOrder2,
-
             getPrinters: getPrinters,
             getPanels: getPanels,
             getImage: getImage,
@@ -148,7 +149,7 @@ angular.module('app').
         })
     }
     function pubHidePrinters(event){
-        $rootScope.$broadcast(HIDE_PRINTERS, event);
+        $rootScope.$emit(HIDE_PRINTERS, event);
     }
 
     function onDropSuccess(handler){
@@ -157,7 +158,7 @@ angular.module('app').
         })
     }
     function pubOnDrop(event){
-        $rootScope.$broadcast(DROP_EVENT, event);
+        $rootScope.$emit(DROP_EVENT, event);
     }
 
     function onOpenModalWindow(handler) {
@@ -166,16 +167,16 @@ angular.module('app').
         })
     }
     function pubOpenModalWindow(order) {
-        $rootScope.$broadcast(OPEN_MODAL_WINDOW, order);
+        $rootScope.$emit(OPEN_MODAL_WINDOW, order);
     }
 
     function onReprintOrder(handler) {
-        $rootScope.$on(REPRINT, function(event, order, $index){
-            handler(order, $index)
+        $rootScope.$on(REPRINT, function(event, order){
+            handler(order)
         })
     }
-    function pubReprintOrder(order, $index) {
-        $rootScope.$broadcast(REPRINT, order, $index);
+    function pubReprintOrder(order) {
+        $rootScope.$emit(REPRINT, order);
     }
 
     function onShowPrinter(handler){
@@ -184,7 +185,7 @@ angular.module('app').
         })
     }
     function pubShowPrinter(event){
-        $rootScope.$broadcast(SHOW_PRINTER, event);
+        $rootScope.$emit(SHOW_PRINTER, event);
     }
 
     return {
@@ -222,51 +223,46 @@ angular.module('app').
     errorDirective.$inject = ["$rootScope"];
 }());
 
-(function(){
+(function () {
     angular.module('app.drop-order.module')
-        .controller('dropOrderCtrl', dropOrderCtrl);
+        .controller('DropOrder', DropOrder);
 
     /* @ngInject */
-    function dropOrderCtrl($scope, $rootScope, $templateCache , dataservices, eventServices) {
+    function DropOrder($scope, $rootScope, $templateCache, dataservices) {
         var vm = this;
 
         //ITEMS
-        function fnSuccessOrders(data){
+        function fnSuccessOrders(data) {
             vm.ordersItems = data.data;
         }
+
         dataservices.getOrders().then(fnSuccessOrders);
 
-        eventServices.onReprintOrder(function(order){
-            vm.ordersItems.push(order);
-        });
-
-        vm.moved = function(order, index){
-            vm.ordersItems.splice(index,1);
-            eventServices.pubOnDrop();
+        vm.moved = function (order, index) {
+            vm.ordersItems.splice(index, 1);
         };
 
-        //PRINTERS
         // LINES
-        function fnSuccess(data) {
-            vm.printers = data.data.printers;
+        function fnSuccess(response) {
+            vm.printers = response.data.printers;
         }
+
         dataservices.getPrinters().then(fnSuccess);
 
-
         //  PRINTER
-        dataservices.getItems().then(function(response){
+        dataservices.getItems().then(function (response) {
             vm.ordersPrinter = response.data;
         });
 
 
     }
-    dropOrderCtrl.$inject = ["$scope", "$rootScope", "$templateCache", "dataservices", "eventServices"];
+    DropOrder.$inject = ["$scope", "$rootScope", "$templateCache", "dataservices"];
 })();
 /**
  * Created by o.syrbu on 10.11.2015.
  */
 (function () {
-    angular.module('app').directive('navBar', navBar);
+    angular.module('app').directive('cmNavBar', navBar);
 
     /* @ngInject */
     function navBar($location, dataservices) {
@@ -274,16 +270,11 @@ angular.module('app').
             restrict: "E",
             templateUrl: 'nav-bar.html',
 
-            link: function (scope, iElement, iAttrs) {
+            link: function (scope) {
                 function fnSuccess(data){
                     scope.panels = data.data.panels;
                 }
                 dataservices.getPanels().then(fnSuccess);
-
-                scope.isActive = function (viewLocation) {
-                    var active = ('/'+viewLocation === $location.path());
-                    return active;
-                };
             }
         }
     }
@@ -291,11 +282,11 @@ angular.module('app').
 }());
 
 (function () {
-    angular.module('app')
-        .controller('parcelCtrl', parcelCtrl);
+    angular.module('app.parcel.module')
+        .controller('Parcel', Parcel);
 
     /* @ngInject */
-    function parcelCtrl($scope, $rootScope, dataservices, $uibModal) {
+    function Parcel($scope, $rootScope, dataservices, $uibModal) {
         var vm = this;
 
         dataservices.getOrders().then(function (responce) {
@@ -311,11 +302,13 @@ angular.module('app').
         function shippedParcel() {
 
         }
+
         function printParcels() {
-          
+
         }
+
         function openParcel() {
-          
+
         }
 
         function openModal(order) {
@@ -323,14 +316,14 @@ angular.module('app').
             getOrderById(order).then(
                 getOrderFnSuccess
             );
-            function getOrderFnSuccess(responce){
+            function getOrderFnSuccess(responce) {
                 vm.modalInstance = $uibModal.open({
-                    animation:true,
+                    animation: true,
                     templateUrl: 'modal-parcel.html',
-                    controller: 'modalCtrl as vm',
-                    size:'lg',
+                    controller: 'modalParcel as vm',
+                    size: 'lg',
                     resolve: {
-                        data:{
+                        data: {
                             items: responce.data,
                             name: order.orderName
                         }
@@ -356,27 +349,28 @@ angular.module('app').
 
 
     }
-    parcelCtrl.$inject = ["$scope", "$rootScope", "dataservices", "$uibModal"];
+    Parcel.$inject = ["$scope", "$rootScope", "dataservices", "$uibModal"];
 
 }());
-(function (){
-    angular.module('app')
-        .controller('printProductPreviewCtrl', printProductPreviewCtrl);
+(function () {
+    angular.module('app.print-preview.module')
+        .controller('PrintProductPreview', PrintProductPreview);
 
     /* @ngInject */
-    function printProductPreviewCtrl($scope, $rootScope, dataservices, eventServices, $uibModal) {
+    function PrintProductPreview($scope, $rootScope, dataservices, eventServices, $uibModal) {
         var vm = this;
 
-        function fnSuccessOrders(data){
+        function fnSuccessOrders(data) {
             vm.ordersPrinter = data.data;
         }
+
         dataservices.getOrders().then(fnSuccessOrders);
 
         vm.openModal = openModal;
         vm.reprintOrder = reprintOrder;
 
-        function reprintOrder(order, index) {
-            eventServices.pubReprintOrder(order, index);
+        function reprintOrder(order) {
+            eventServices.pubReprintOrder(order);
         }
 
         function openModal(order) {
@@ -385,14 +379,14 @@ angular.module('app').
                 getOrderFnSuccess
             );
 
-            function getOrderFnSuccess(responce){
+            function getOrderFnSuccess(responce) {
                 vm.modalInstance = $uibModal.open({
-                    animation:true,
+                    animation: true,
                     templateUrl: 'modal-preview.html',
-                    controller: 'modalPreviewCtrl as vm',
-                    size:'lg',
+                    controller: 'ModalPreview as vm',
+                    size: 'lg',
                     resolve: {
-                        data:{
+                        data: {
                             items: responce.data,
                             name: order.orderName
                         }
@@ -407,22 +401,22 @@ angular.module('app').
         }
 
         function createParcelSuccess(order) {
-            debugger
+
         }
 
         function createParcelFailure() {
-            debugger
+
         }
     }
-    printProductPreviewCtrl.$inject = ["$scope", "$rootScope", "dataservices", "eventServices", "$uibModal"];
+    PrintProductPreview.$inject = ["$scope", "$rootScope", "dataservices", "eventServices", "$uibModal"];
 
 }());
-(function (){
-    angular.module('app')
-        .controller('productionsLabelCtrl', productionsLabelCtrl);
+(function () {
+    angular.module('app.productions-label.module')
+        .controller('ProductionsLabel', ProductionsLabel);
 
     /* @ngInject */
-    function productionsLabelCtrl($scope, $rootScope, $http, dataservices, eventServices) {
+    function ProductionsLabel($scope, $rootScope, $http, dataservices, eventServices) {
         var vm = this;
         vm.getImage = getImage;
 
@@ -433,86 +427,47 @@ angular.module('app').
         }
 
     }
-    productionsLabelCtrl.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices"];
+    ProductionsLabel.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices"];
 
 }());
-(function (){
-    angular.module('app')
-        .controller('shippingCtrl', shippingCtrl);
+(function () {
+    angular.module('app.shipping')
+        .controller('Shipping', Shipping);
 
     /* @ngInject */
-    function shippingCtrl($scope, $rootScope, $http, dataservices, eventServices) {
+    function Shipping($scope, $rootScope, $http, dataservices, eventServices) {
         var vm = this;
-
     }
-    shippingCtrl.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices"];
+    Shipping.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices"];
 
 }());
 (function () {
-    angular.module('app')
-        .controller('itemsCtrl', itemsCtrl);
+    angular.module('app.drop-order.module').directive('cmItems', cmItems);
 
     /* @ngInject */
-    function itemsCtrl($scope, $rootScope, dataservices, eventServices) {
-       // var vm = this;
-       // function fnSuccessOrders(data){
-       //     vm.ordersItems = data.data;
-       // }
-       // dataservices.getOrders().then(fnSuccessOrders);
-       //
-       //eventServices.onReprintOrder(function(order){
-       //     vm.ordersItems.push(order);
-       // });
-       //
-       // vm.moved = function(order, index){
-       //     vm.ordersItems.splice(index,1);
-       //     eventServices.pubOnDrop();
-       // };
-
-
-    }
-    itemsCtrl.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
-
-}());
-(function () {
-    angular.module('app').directive('items', itemsDirective);
-
-    /* @ngInject */
-    function itemsDirective() {
+    function cmItems() {
         var directive = {
             restrict: "E",
             templateUrl: 'items.html',
-            scope:true,
-            //controller:"itemsCtrl as vm",
-            link:linkFn
+            scope:true
         };
         return directive;
-
-        function linkFn(scope, element, attrs) {
-
-
-
-        }
     }
 }());
 
 (function () {
-    angular.module('app')
-        .controller('linesCtrl', linesCtrl);
+    angular.module('app.drop-order.module')
+        .controller('Items', Items);
 
     /* @ngInject */
-    function linesCtrl($scope, $rootScope, dataservices, eventServices) {
-        //var vm = this;
-        //function fnSuccess(data) {
-        //    vm.printers = data.data.printers;
-        //}
-        //dataservices.getPrinters().then(fnSuccess);
+    function Items($scope, $rootScope, dataservices, eventServices) {
+
     }
-    linesCtrl.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
+    Items.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
 
 }());
 (function () {
-    angular.module('app').directive('lines', linesDirective);
+    angular.module('app.drop-order.module').directive('cmLines', linesDirective);
 
     /* @ngInject */
     function linesDirective() {
@@ -527,23 +482,18 @@ angular.module('app').
 
 }());
 
-(function (){
-    angular.module('app')
-        .controller('printerCtrl', printerCtrl);
+(function () {
+    angular.module('app.drop-order.module')
+        .controller('Lines', Lines);
 
     /* @ngInject */
-    function printerCtrl ($scope, $rootScope, dataservices, eventServices){
-        //var vm = this;
-        //dataservices.getItems().then(function(response){
-        //    vm.ordersPrinter = response.data;
-        //});
-
+    function Lines($scope, $rootScope, dataservices, eventServices) {
     }
-    printerCtrl.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
+    Lines.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
 
 }());
 (function () {
-    angular.module('app').directive('printer', printerDirective);
+    angular.module('app.drop-order.module').directive('cmPrinter', printerDirective);
 
     /* @ngInject */
     function printerDirective() {
@@ -558,24 +508,39 @@ angular.module('app').
     }
 }());
 
+(function () {
+    angular.module('app.drop-order.module')
+        .controller('Printer', Printer);
+
+    /* @ngInject */
+    function Printer($scope, $rootScope, dataservices, eventServices) {
+        //var vm = this;
+        //dataservices.getItems().then(function(response){
+        //    vm.ordersPrinter = response.data;
+        //});
+
+    }
+    Printer.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
+
+}());
 /**
  * Created by o.syrbu on 24.11.2015.
  */
 (function () {
     angular.module('app.parcel.module')
-        .controller('modalCtrl', modalCtrl);
+        .controller('modalParcel', modalParcel);
 
     /* @ngInject */
-    function modalCtrl($scope, $rootScope, dataservices, data, $uibModalInstance) {
+    function modalParcel($scope, $rootScope, dataservices, data, $uibModalInstance) {
         var vm = this;
         vm.modalOrders = data.items;
         vm.orderName = data.name;
         vm.paramsParcel = [
-            {name:'Weight'},
-            {name:'Space'},
-            {name:'Height'},
-            {name:'Length'},
-            {name:'Width'}
+            {name: 'Weight'},
+            {name: 'Space'},
+            {name: 'Height'},
+            {name: 'Length'},
+            {name: 'Width'}
         ];
 
         vm.cancel = cancelWindow;
@@ -590,11 +555,11 @@ angular.module('app').
         }
 
     }
-    modalCtrl.$inject = ["$scope", "$rootScope", "dataservices", "data", "$uibModalInstance"];
+    modalParcel.$inject = ["$scope", "$rootScope", "dataservices", "data", "$uibModalInstance"];
 
 }());
 (function () {
-    angular.module('app').directive('overviewParcels', overviewDirective);
+    angular.module('app.parcel.module').directive('cmOverviewParcels', overviewDirective);
 
     /* @ngInject */
     function overviewDirective() {
@@ -607,7 +572,7 @@ angular.module('app').
 }());
 
 (function () {
-    angular.module('app').directive('parcelsOrders', ordersDirective);
+    angular.module('app.parcel.module').directive('cmParcelsOrders', ordersDirective);
 
     /* @ngInject */
     function ordersDirective() {
@@ -619,12 +584,24 @@ angular.module('app').
     }
 }());
 
-(function (){
-    angular.module('app')
-        .controller('modalPreviewCtrl', modalPreviewCtrl);
+(function () {
+    angular.module('app.print-preview.module').directive('cmModal', modalPreview);
 
     /* @ngInject */
-    function modalPreviewCtrl($scope, $rootScope, $http, dataservices, eventServices, $uibModalInstance, data) {
+    function modalPreview() {
+        return {
+            restrict: "E",
+            templateUrl: 'modal-preview.html'
+        }
+    }
+}());
+
+(function () {
+    angular.module('app.print-preview.module')
+        .controller('ModalPreview', ModalPreview);
+
+    /* @ngInject */
+    function ModalPreview($scope, $rootScope, $http, dataservices, eventServices, $uibModalInstance, data) {
         var vm = this;
 
         vm.getLabels = getLabels;
@@ -643,40 +620,29 @@ angular.module('app').
         }
 
         function sendOnPrint(itemId) {
-            $uibModalInstance.close(order);
-            debugger
+            $uibModalInstance.close();
         }
+
         function getImg(itemId) {
 
         }
+
         function getLabels(itemId) {
             //call on server returns array labels
             vm.labels = [
-                {'name':"label 1"},
-                {'name':"label 3333"},
-                {'name':"label 1231231"}
+                {'name': "label 1"},
+                {'name': "label 3333"},
+                {'name': "label 1231231"}
             ];
         }
 
     }
-    modalPreviewCtrl.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices", "$uibModalInstance", "data"];
+    ModalPreview.$inject = ["$scope", "$rootScope", "$http", "dataservices", "eventServices", "$uibModalInstance", "data"];
 
 }());
 (function () {
-    angular.module('app').directive('modal', modalPreview);
-
-    /* @ngInject */
-    function modalPreview() {
-        return {
-            restrict: "E",
-            templateUrl: 'modal-preview.html'
-        }
-    }
-}());
-
-(function () {
-    angular.module('app.print-product-preview.module')
-        .directive('previewOrders', ordersPreviewDirective);
+    angular.module('app.print-preview.module')
+        .directive('cmPreviewOrders', ordersPreviewDirective);
 
     /* @ngInject */
     function ordersPreviewDirective() {
@@ -687,19 +653,13 @@ angular.module('app').
     }
 }());
 
-(function (){
-    angular.module('app.print-product-preview.module')
-        .controller('OrdersPreviewCtrl', OrdersPreviewCtrl);
+(function () {
+    angular.module('app.print-preview.module')
+        .controller('OrdersPreview', OrdersPreview);
 
     /* @ngInject */
-    function OrdersPreviewCtrl($scope, $rootScope, dataservices, eventServices) {
-        //var vm = this;
-        //function fnSuccessOrders(data){
-        //    vm.ordersPrinter = data.data;
-        //}
-        //dataservices.getOrders().then(fnSuccessOrders);
-
+    function OrdersPreview($scope, $rootScope, dataservices, eventServices) {
     }
-    OrdersPreviewCtrl.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
+    OrdersPreview.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
 
 }());

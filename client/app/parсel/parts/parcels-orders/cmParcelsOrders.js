@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app').directive('parcelsOrders', ordersDirective);
+    angular.module('app.parcel.module').directive('cmParcelsOrders', ordersDirective);
 
     /* @ngInject */
     function ordersDirective() {

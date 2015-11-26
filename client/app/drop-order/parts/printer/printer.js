@@ -1,9 +1,9 @@
-(function (){
-    angular.module('app')
-        .controller('printerCtrl', printerCtrl);
+(function () {
+    angular.module('app.drop-order.module')
+        .controller('Printer', Printer);
 
     /* @ngInject */
-    function printerCtrl ($scope, $rootScope, dataservices, eventServices){
+    function Printer($scope, $rootScope, dataservices, eventServices) {
         //var vm = this;
         //dataservices.getItems().then(function(response){
         //    vm.ordersPrinter = response.data;

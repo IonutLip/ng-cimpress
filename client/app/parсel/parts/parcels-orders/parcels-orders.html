@@ -9,8 +9,6 @@
     </div>
     <ul>
         <li ng-repeat="order in vm.ordersParcels"
-            dnd-draggable="order"
-            dnd-moved="vm.moved(order, $index)"
             class="border">
                 <span class="col-md-3">
                     {{order.orderName}}
@@ -20,7 +18,6 @@
                 </span>
                 <span class="col-md-3">
                    <button type="button" class="btn btn-primary"
-                           data-toggle="modal"
                            ng-click="vm.openModal(order)">
                        Create parcel
                    </button>

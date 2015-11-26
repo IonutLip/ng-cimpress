@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app').directive('lines', linesDirective);
+    angular.module('app.drop-order.module').directive('cmLines', linesDirective);
 
     /* @ngInject */
     function linesDirective() {

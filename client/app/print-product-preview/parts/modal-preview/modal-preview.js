@@ -1,9 +1,9 @@
-(function (){
-    angular.module('app')
-        .controller('modalPreviewCtrl', modalPreviewCtrl);
+(function () {
+    angular.module('app.print-preview.module')
+        .controller('ModalPreview', ModalPreview);
 
     /* @ngInject */
-    function modalPreviewCtrl($scope, $rootScope, $http, dataservices, eventServices, $uibModalInstance, data) {
+    function ModalPreview($scope, $rootScope, $http, dataservices, eventServices, $uibModalInstance, data) {
         var vm = this;
 
         vm.getLabels = getLabels;
@@ -22,18 +22,19 @@
         }
 
         function sendOnPrint(itemId) {
-            $uibModalInstance.close(order);
-            debugger
+            $uibModalInstance.close();
         }
+
         function getImg(itemId) {
 
         }
+
         function getLabels(itemId) {
             //call on server returns array labels
             vm.labels = [
-                {'name':"label 1"},
-                {'name':"label 3333"},
-                {'name':"label 1231231"}
+                {'name': "label 1"},
+                {'name': "label 3333"},
+                {'name': "label 1231231"}
             ];
         }
 

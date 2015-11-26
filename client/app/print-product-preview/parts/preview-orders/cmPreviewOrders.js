@@ -1,6 +1,6 @@
 (function () {
-    angular.module('app.print-product-preview.module')
-        .directive('previewOrders', ordersPreviewDirective);
+    angular.module('app.print-preview.module')
+        .directive('cmPreviewOrders', ordersPreviewDirective);
 
     /* @ngInject */
     function ordersPreviewDirective() {

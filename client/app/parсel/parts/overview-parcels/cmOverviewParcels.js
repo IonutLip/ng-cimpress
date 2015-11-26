@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app').directive('overviewParcels', overviewDirective);
+    angular.module('app.parcel.module').directive('cmOverviewParcels', overviewDirective);
 
     /* @ngInject */
     function overviewDirective() {

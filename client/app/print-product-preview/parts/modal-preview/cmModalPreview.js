@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app').directive('modal', modalPreview);
+    angular.module('app.print-preview.module').directive('cmModal', modalPreview);
 
     /* @ngInject */
     function modalPreview() {

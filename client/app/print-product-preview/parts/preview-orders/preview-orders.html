@@ -2,12 +2,12 @@
     <div class="panel-heading">
         <div class="panel-title">
             <div class="col-md-3">Order</div>
-            <div class="col-md-3">item</div>
+            <div class="col-md-3">Items</div>
             <div class="clearfix"></div>
         </div>
     </div>
     <ul>
-        <li class="border pointer"
+        <li class="border cursorPointer"
             ng-repeat="order in vm.ordersPrinter">
                 <span class="col-md-3">
                     {{order.orderName}}
@@ -23,7 +23,7 @@
                 </span>
                 <span class="col-md-3">
                     <button type="button" class="btn btn-default"
-                            ng-click="vm.reprintOrder(order,$index)">
+                            ng-click="vm.reprintOrder(order)">
                         Re-print
                     </button>
                 </span>

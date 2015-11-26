@@ -1,25 +1,10 @@
 <div class="page-header">
-    <ul class="nav nav-pills">
-        <li role="presentation"
-            ng-class="{ active: isActive('DropService') }">
-            <a ui-sref="dropOrder.printers">
-                Print order
-            </a>
-        </li>
-        <li>
-            <a ui-sref="Print-product-preview.orders">
-                Print product preview
-            </a>
-        </li>
-        <li>
-            <a ui-sref="Parcel.create">
-               Create parcel
-            </a>
-        </li>
-
-        <li>
-            <a ui-sref="Parcel.overview">
-                Overview parcel
+    <ul class="nav nav-pills"
+        ng-repeat="panel in panels">
+        <li role="presentation">
+            <a ui-sref="{{panel.link}}"
+               ng-class="{active: $state.includes('Drop-order')}">
+                {{panel.name}}
             </a>
         </li>
     </ul>

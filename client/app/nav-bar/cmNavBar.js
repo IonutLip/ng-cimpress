@@ -2,7 +2,7 @@
  * Created by o.syrbu on 10.11.2015.
  */
 (function () {
-    angular.module('app').directive('navBar', navBar);
+    angular.module('app').directive('cmNavBar', navBar);
 
     /* @ngInject */
     function navBar($location, dataservices) {
@@ -10,16 +10,11 @@
             restrict: "E",
             templateUrl: 'nav-bar.html',
 
-            link: function (scope, iElement, iAttrs) {
+            link: function (scope) {
                 function fnSuccess(data){
                     scope.panels = data.data.panels;
                 }
                 dataservices.getPanels().then(fnSuccess);
-
-                scope.isActive = function (viewLocation) {
-                    var active = ('/'+viewLocation === $location.path());
-                    return active;
-                };
             }
         }
     }

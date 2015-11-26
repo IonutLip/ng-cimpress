@@ -13,7 +13,7 @@ angular.module('app').
         })
     }
     function pubHidePrinters(event){
-        $rootScope.$broadcast(HIDE_PRINTERS, event);
+        $rootScope.$emit(HIDE_PRINTERS, event);
     }
 
     function onDropSuccess(handler){
@@ -22,7 +22,7 @@ angular.module('app').
         })
     }
     function pubOnDrop(event){
-        $rootScope.$broadcast(DROP_EVENT, event);
+        $rootScope.$emit(DROP_EVENT, event);
     }
 
     function onOpenModalWindow(handler) {
@@ -31,16 +31,16 @@ angular.module('app').
         })
     }
     function pubOpenModalWindow(order) {
-        $rootScope.$broadcast(OPEN_MODAL_WINDOW, order);
+        $rootScope.$emit(OPEN_MODAL_WINDOW, order);
     }
 
     function onReprintOrder(handler) {
-        $rootScope.$on(REPRINT, function(event, order, $index){
-            handler(order, $index)
+        $rootScope.$on(REPRINT, function(event, order){
+            handler(order)
         })
     }
-    function pubReprintOrder(order, $index) {
-        $rootScope.$broadcast(REPRINT, order, $index);
+    function pubReprintOrder(order) {
+        $rootScope.$emit(REPRINT, order);
     }
 
     function onShowPrinter(handler){
@@ -49,7 +49,7 @@ angular.module('app').
         })
     }
     function pubShowPrinter(event){
-        $rootScope.$broadcast(SHOW_PRINTER, event);
+        $rootScope.$emit(SHOW_PRINTER, event);
     }
 
     return {

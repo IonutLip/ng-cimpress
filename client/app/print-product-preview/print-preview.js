@@ -1,21 +1,22 @@
-(function (){
-    angular.module('app')
-        .controller('printProductPreviewCtrl', printProductPreviewCtrl);
+(function () {
+    angular.module('app.print-preview.module')
+        .controller('PrintProductPreview', PrintProductPreview);
 
     /* @ngInject */
-    function printProductPreviewCtrl($scope, $rootScope, dataservices, eventServices, $uibModal) {
+    function PrintProductPreview($scope, $rootScope, dataservices, eventServices, $uibModal) {
         var vm = this;
 
-        function fnSuccessOrders(data){
+        function fnSuccessOrders(data) {
             vm.ordersPrinter = data.data;
         }
+
         dataservices.getOrders().then(fnSuccessOrders);
 
         vm.openModal = openModal;
         vm.reprintOrder = reprintOrder;
 
-        function reprintOrder(order, index) {
-            eventServices.pubReprintOrder(order, index);
+        function reprintOrder(order) {
+            eventServices.pubReprintOrder(order);
         }
 
         function openModal(order) {
@@ -24,14 +25,14 @@
                 getOrderFnSuccess
             );
 
-            function getOrderFnSuccess(responce){
+            function getOrderFnSuccess(responce) {
                 vm.modalInstance = $uibModal.open({
-                    animation:true,
+                    animation: true,
                     templateUrl: 'modal-preview.html',
-                    controller: 'modalPreviewCtrl as vm',
-                    size:'lg',
+                    controller: 'ModalPreview as vm',
+                    size: 'lg',
                     resolve: {
-                        data:{
+                        data: {
                             items: responce.data,
                             name: order.orderName
                         }
@@ -46,11 +47,11 @@
         }
 
         function createParcelSuccess(order) {
-            debugger
+
         }
 
         function createParcelFailure() {
-            debugger
+
         }
     }
 

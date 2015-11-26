@@ -3,19 +3,19 @@
  */
 (function () {
     angular.module('app.parcel.module')
-        .controller('modalCtrl', modalCtrl);
+        .controller('modalParcel', modalParcel);
 
     /* @ngInject */
-    function modalCtrl($scope, $rootScope, dataservices, data, $uibModalInstance) {
+    function modalParcel($scope, $rootScope, dataservices, data, $uibModalInstance) {
         var vm = this;
         vm.modalOrders = data.items;
         vm.orderName = data.name;
         vm.paramsParcel = [
-            {name:'Weight'},
-            {name:'Space'},
-            {name:'Height'},
-            {name:'Length'},
-            {name:'Width'}
+            {name: 'Weight'},
+            {name: 'Space'},
+            {name: 'Height'},
+            {name: 'Length'},
+            {name: 'Width'}
         ];
 
         vm.cancel = cancelWindow;

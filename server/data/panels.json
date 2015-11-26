@@ -1,20 +1,20 @@
 {"panels":
 	[
 		{
-			"name":"Drop service",
-			"link":"DropService"
+			"name":"Drop order",
+			"link":"dropOrder.printers"
 		},
 		{
-			"name":"Label service",
-			"link":"LabelService"
+			"name":"Print product preview",
+			"link":"Print-product-preview.orders"
 		},
 		{
-			"name":"Fulfillment adapter preview",
-			"link":"FulfillmentAdapter"
+			"name":"Parcel create",
+			"link":"Parcel.create"
 		},
 		{
-			"name":"Shipping client service",
-			"link":"ShippingService"
+			"name":"Overview parcel",
+			"link":"Parcel.overview"
 		}
 	]
 }

@@ -1,5 +1,5 @@
 (function () {
-    angular.module('app').directive('printer', printerDirective);
+    angular.module('app.drop-order.module').directive('cmPrinter', printerDirective);
 
     /* @ngInject */
     function printerDirective() {

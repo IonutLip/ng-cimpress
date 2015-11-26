@@ -36,7 +36,6 @@
             getOrders: getOrders,
             getOrder1: getOrder1,
             getOrder2: getOrder2,
-
             getPrinters: getPrinters,
             getPanels: getPanels,
             getImage: getImage,
