@@ -5,6 +5,7 @@
     function ordersDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'parcels-orders.html',
             scope:true
         }

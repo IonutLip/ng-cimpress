@@ -6,6 +6,7 @@
     function ordersPreviewDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'preview-orders.html'
         }
     }

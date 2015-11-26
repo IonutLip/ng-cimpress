@@ -5,6 +5,7 @@
     function overviewDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'overview-parcels.html',
             scope:true
         }

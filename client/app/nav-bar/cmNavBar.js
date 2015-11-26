@@ -7,6 +7,7 @@
     /* @ngInject */
     function navBar(dataservices) {
         return {
+            replace: true,
             restrict: "E",
             templateUrl: 'nav-bar.html',
 

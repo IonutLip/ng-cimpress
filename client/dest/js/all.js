@@ -219,6 +219,7 @@ angular.module('app').
     function errorDirective($rootScope) {
         return {
             restrict: "E",
+            replace: true,
             template: '<div ng-show="isError" class="alert-danger alert">Error</div>',
             link: function (scope) {
                 $rootScope.$on('errorEvent', function () {
@@ -265,29 +266,6 @@ angular.module('app').
     }
     DropOrder.$inject = ["$scope", "$rootScope", "$templateCache", "dataservices"];
 })();
-/**
- * Created by o.syrbu on 10.11.2015.
- */
-(function () {
-    angular.module('app').directive('cmNavBar', navBar);
-
-    /* @ngInject */
-    function navBar(dataservices) {
-        return {
-            restrict: "E",
-            templateUrl: 'nav-bar.html',
-
-            link: function (scope) {
-                function fnSuccess(data){
-                    scope.panels = data.data.panels;
-                }
-                dataservices.getPanels().then(fnSuccess);
-            }
-        }
-    }
-    navBar.$inject = ["dataservices"];
-}());
-
 (function () {
     angular.module('app.parcel.module')
         .controller('Parcel', Parcel);
@@ -359,6 +337,30 @@ angular.module('app').
     Parcel.$inject = ["$scope", "$rootScope", "dataservices", "$uibModal"];
 
 }());
+/**
+ * Created by o.syrbu on 10.11.2015.
+ */
+(function () {
+    angular.module('app').directive('cmNavBar', navBar);
+
+    /* @ngInject */
+    function navBar(dataservices) {
+        return {
+            replace: true,
+            restrict: "E",
+            templateUrl: 'nav-bar.html',
+
+            link: function (scope) {
+                function fnSuccess(data){
+                    scope.panels = data.data.panels;
+                }
+                dataservices.getPanels().then(fnSuccess);
+            }
+        }
+    }
+    navBar.$inject = ["dataservices"];
+}());
+
 (function () {
     angular.module('app.print-preview.module')
         .controller('PrintProductPreview', PrintProductPreview);
@@ -449,37 +451,13 @@ angular.module('app').
 
 }());
 (function () {
-    angular.module('app.drop-order.module').directive('cmItems', cmItems);
-
-    /* @ngInject */
-    function cmItems() {
-        var directive = {
-            restrict: "E",
-            templateUrl: 'items.html',
-            scope:true
-        };
-        return directive;
-    }
-}());
-
-(function () {
-    angular.module('app.drop-order.module')
-        .controller('Items', Items);
-
-    /* @ngInject */
-    function Items($scope, $rootScope, dataservices, eventServices) {
-
-    }
-    Items.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
-
-}());
-(function () {
     angular.module('app.drop-order.module').directive('cmLines', linesDirective);
 
     /* @ngInject */
     function linesDirective() {
         var directive = {
             restrict: 'E',
+            replace: true,
             templateUrl: 'lines.html',
             scope:true
         };
@@ -500,12 +478,39 @@ angular.module('app').
 
 }());
 (function () {
+    angular.module('app.drop-order.module').directive('cmItems', cmItems);
+
+    /* @ngInject */
+    function cmItems() {
+        var directive = {
+            restrict: "E",
+            replace: true,
+            templateUrl: 'items.html',
+            scope:true
+        };
+        return directive;
+    }
+}());
+
+(function () {
+    angular.module('app.drop-order.module')
+        .controller('Items', Items);
+
+    /* @ngInject */
+    function Items($scope, $rootScope, dataservices, eventServices) {
+
+    }
+    Items.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
+
+}());
+(function () {
     angular.module('app.drop-order.module').directive('cmPrinter', printerDirective);
 
     /* @ngInject */
     function printerDirective() {
         var directive = {
             restrict: "E",
+            replace: true,
             templateUrl: 'printer.html',
             scope:true
             //, controller:"itemsCtrl"
@@ -572,6 +577,7 @@ angular.module('app').
     function overviewDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'overview-parcels.html',
             scope:true
         }
@@ -585,6 +591,7 @@ angular.module('app').
     function ordersDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'parcels-orders.html',
             scope:true
         }
@@ -598,6 +605,7 @@ angular.module('app').
     function modalPreview() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'modal-preview.html'
         }
     }
@@ -655,6 +663,7 @@ angular.module('app').
     function ordersPreviewDirective() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'preview-orders.html'
         }
     }

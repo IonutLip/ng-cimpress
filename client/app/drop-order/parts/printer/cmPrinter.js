@@ -5,6 +5,7 @@
     function printerDirective() {
         var directive = {
             restrict: "E",
+            replace: true,
             templateUrl: 'printer.html',
             scope:true
             //, controller:"itemsCtrl"

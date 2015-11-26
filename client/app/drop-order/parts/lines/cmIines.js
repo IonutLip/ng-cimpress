@@ -5,6 +5,7 @@
     function linesDirective() {
         var directive = {
             restrict: 'E',
+            replace: true,
             templateUrl: 'lines.html',
             scope:true
         };

@@ -5,6 +5,7 @@
     function cmItems() {
         var directive = {
             restrict: "E",
+            replace: true,
             templateUrl: 'items.html',
             scope:true
         };

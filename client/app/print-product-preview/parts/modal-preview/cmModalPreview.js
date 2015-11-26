@@ -5,6 +5,7 @@
     function modalPreview() {
         return {
             restrict: "E",
+            replace: true,
             templateUrl: 'modal-preview.html'
         }
     }
