@@ -57,5 +57,12 @@
                     .otherwise('/Drop-order/printers/');
 
             }
-        );
+        )
+        .run([
+            '$rootScope','$state',
+            function ($rootScope, $state, $stateParams) {
+                $rootScope.$state = $state;
+                return $rootScope.$stateParams = $stateParams;
+            }
+        ]);
 })();

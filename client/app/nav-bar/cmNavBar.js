@@ -5,7 +5,7 @@
     angular.module('app').directive('cmNavBar', navBar);
 
     /* @ngInject */
-    function navBar($location, dataservices) {
+    function navBar(dataservices) {
         return {
             restrict: "E",
             templateUrl: 'nav-bar.html',

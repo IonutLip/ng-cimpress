@@ -17,20 +17,27 @@
                     {{order.name}}
                 </span>
                 <span class="col-md-3">
-                    <button type="button" class="btn btn-primary"
-                        ng-click="vm.openParcel(order)">
-                    Open
-                    </button>
-                    <button type="button" class="btn btn-primary"
-                         ng-click="vm.printParcels(order)">
-                     Print
-                    </button>
-                    <button type="button" class="btn btn-primary"
-                        ng-click="vm.shippedParcel(order)">
-                    Shipped
-                    </button>
+                    <span class="row reset-row">
+                        <span class="col-md-4">
+                             <button type="button" class="btn btn-primary"
+                                     ng-click="vm.openParcel(order)">
+                                 Open
+                             </button>
+                        </span>
+                        <span class="col-md-4">
+                             <button type="button" class="btn btn-primary"
+                                     ng-click="vm.printParcels(order)">
+                                 Print
+                             </button>
+                        </span>
+                        <span class="col-md-4">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="vm.shippedParcel(order)">
+                                Shipped
+                            </button>
+                        </span>
+                    </span>
                 </span>
-
             <span class="clearfix"></span>
         </li>
     </ul>

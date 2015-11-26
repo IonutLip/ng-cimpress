@@ -82,7 +82,14 @@
                     .otherwise('/Drop-order/printers/');
 
             }]
-        );
+        )
+        .run([
+            '$rootScope','$state',
+            function ($rootScope, $state, $stateParams) {
+                $rootScope.$state = $state;
+                return $rootScope.$stateParams = $stateParams;
+            }
+        ]);
 })();
 
 (function () {
@@ -265,7 +272,7 @@ angular.module('app').
     angular.module('app').directive('cmNavBar', navBar);
 
     /* @ngInject */
-    function navBar($location, dataservices) {
+    function navBar(dataservices) {
         return {
             restrict: "E",
             templateUrl: 'nav-bar.html',
@@ -278,7 +285,7 @@ angular.module('app').
             }
         }
     }
-    navBar.$inject = ["$location", "dataservices"];
+    navBar.$inject = ["dataservices"];
 }());
 
 (function () {

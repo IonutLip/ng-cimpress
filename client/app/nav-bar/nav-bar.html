@@ -1,9 +1,11 @@
 <div class="page-header">
-    <ul class="nav nav-pills"
-        ng-repeat="panel in panels">
-        <li role="presentation">
-            <a ui-sref="{{panel.link}}"
-               ng-class="{active: $state.includes('Drop-order')}">
+    <ul class="nav nav-pills">
+
+        <li role="presentation"
+            ng-repeat="panel in panels"
+            ng-class="{active: $state.includes('{{panel.link}}')}">
+
+            <a ui-sref="{{panel.link}}">
                 {{panel.name}}
             </a>
         </li>
