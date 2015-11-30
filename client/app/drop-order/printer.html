@@ -1,0 +1,24 @@
+<div class="panel panel-primary panel-orders">
+    <cm-items-header
+        ng-if="vm.dataHeaderItems"
+        col-number="4"
+        titles='vm.dataHeaderItems'
+    >
+    </cm-items-header>
+
+    <ul dnd-list="vm.ordersPrinter">
+        <li class="border"
+            ng-repeat="order in vm.ordersPrinter">
+                <span class="col-md-3">
+                    {{order.orderName}}
+                </span>
+                <span class="col-md-3">
+                    {{order.name}}
+                </span>
+                <span class="col-md-3">
+                   Paper
+                </span>
+            <span class="clearfix"></span>
+        </li>
+    </ul>
+</div>

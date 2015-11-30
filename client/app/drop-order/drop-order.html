@@ -1,7 +1,26 @@
 <div class="row">
+    <!--orders data-->
     <div class="col-md-6">
-        <cm-items></cm-items>
+        <div class="panel panel-primary panel-orders">
+            <cm-items-header
+                ng-if="vm.dataHeaderItems"
+                col-number="6"
+                titles='vm.dataHeaderItems'>
+            </cm-items-header>
+
+            <cm-items
+                ng-if="vm.orders"
+                col-number="6"
+                vm="vm"
+                data="vm.orders"
+                draggable="true"
+            >
+            </cm-items>
+
+        </div>
     </div>
 
-    <div ui-view></div>
+    <div class="col-md-6">
+        <div ui-view></div>
+    </div>
 </div>

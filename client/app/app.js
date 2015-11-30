@@ -20,11 +20,11 @@
                     })
                     .state('dropOrder.printers', {
                         url: "/printers",
-                        template: "<cm-lines></cm-lines>"
+                        templateUrl: "lines-printer.html"
                     })
                     .state('dropOrder.printer', {
                         url: "/printers/:id",
-                        template: "<cm-printer></cm-printer>"
+                        templateUrl: "printer.html"
                     })
 
                     .state('Print-product-preview', {

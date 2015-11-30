@@ -3,19 +3,27 @@
         .controller('DropOrder', DropOrder);
 
     /* @ngInject */
-    function DropOrder($scope, $rootScope, $templateCache, dataservices) {
+    function DropOrder($scope, $rootScope, dataservices) {
         var vm = this;
 
         //ITEMS
         function fnSuccessOrders(data) {
-            vm.ordersItems = data.data;
+            vm.orders = data.data;
         }
-
         dataservices.getOrders().then(fnSuccessOrders);
 
-        vm.moved = function (order, index) {
-            vm.ordersItems.splice(index, 1);
+        vm.dataHeaderItems = [
+            'Orders',
+            'Items'
+        ];
+        vm.titleLinesPrinter = [
+            'Orders'
+        ];
+
+        vm.movedDrop = function (order, index) {
+            vm.orders.splice(index, 1);
         };
+
 
         // LINES
         function fnSuccess(response) {

@@ -45,11 +45,11 @@
                     })
                     .state('dropOrder.printers', {
                         url: "/printers",
-                        template: "<cm-lines></cm-lines>"
+                        templateUrl: "lines-printer.html"
                     })
                     .state('dropOrder.printer', {
                         url: "/printers/:id",
-                        template: "<cm-printer></cm-printer>"
+                        templateUrl: "printer.html"
                     })
 
                     .state('Print-product-preview', {
@@ -236,19 +236,27 @@ angular.module('app').
         .controller('DropOrder', DropOrder);
 
     /* @ngInject */
-    function DropOrder($scope, $rootScope, $templateCache, dataservices) {
+    function DropOrder($scope, $rootScope, dataservices) {
         var vm = this;
 
         //ITEMS
         function fnSuccessOrders(data) {
-            vm.ordersItems = data.data;
+            vm.orders = data.data;
         }
-
         dataservices.getOrders().then(fnSuccessOrders);
 
-        vm.moved = function (order, index) {
-            vm.ordersItems.splice(index, 1);
+        vm.dataHeaderItems = [
+            'Orders',
+            'Items'
+        ];
+        vm.titleLinesPrinter = [
+            'Orders'
+        ];
+
+        vm.movedDrop = function (order, index) {
+            vm.orders.splice(index, 1);
         };
+
 
         // LINES
         function fnSuccess(response) {
@@ -264,8 +272,32 @@ angular.module('app').
 
 
     }
-    DropOrder.$inject = ["$scope", "$rootScope", "$templateCache", "dataservices"];
+    DropOrder.$inject = ["$scope", "$rootScope", "dataservices"];
 })();
+/**
+ * Created by o.syrbu on 10.11.2015.
+ */
+(function () {
+    angular.module('app').directive('cmNavBar', navBar);
+
+    /* @ngInject */
+    function navBar(dataservices) {
+        return {
+            replace: true,
+            restrict: "E",
+            templateUrl: 'nav-bar.html',
+
+            link: function (scope) {
+                function fnSuccess(data){
+                    scope.panels = data.data.panels;
+                }
+                dataservices.getPanels().then(fnSuccess);
+            }
+        }
+    }
+    navBar.$inject = ["dataservices"];
+}());
+
 (function () {
     angular.module('app.parcel.module')
         .controller('Parcel', Parcel);
@@ -337,30 +369,6 @@ angular.module('app').
     Parcel.$inject = ["$scope", "$rootScope", "dataservices", "$uibModal"];
 
 }());
-/**
- * Created by o.syrbu on 10.11.2015.
- */
-(function () {
-    angular.module('app').directive('cmNavBar', navBar);
-
-    /* @ngInject */
-    function navBar(dataservices) {
-        return {
-            replace: true,
-            restrict: "E",
-            templateUrl: 'nav-bar.html',
-
-            link: function (scope) {
-                function fnSuccess(data){
-                    scope.panels = data.data.panels;
-                }
-                dataservices.getPanels().then(fnSuccess);
-            }
-        }
-    }
-    navBar.$inject = ["dataservices"];
-}());
-
 (function () {
     angular.module('app.print-preview.module')
         .controller('PrintProductPreview', PrintProductPreview);
@@ -451,44 +459,63 @@ angular.module('app').
 
 }());
 (function () {
-    angular.module('app.drop-order.module').directive('cmLines', linesDirective);
-
-    /* @ngInject */
-    function linesDirective() {
-        var directive = {
-            restrict: 'E',
-            replace: true,
-            templateUrl: 'lines.html',
-            scope:true
-        };
-        return directive;
-
-    }
-
-}());
-
-(function () {
-    angular.module('app.drop-order.module')
-        .controller('Lines', Lines);
-
-    /* @ngInject */
-    function Lines($scope, $rootScope, dataservices, eventServices) {
-    }
-    Lines.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
-
-}());
-(function () {
     angular.module('app.drop-order.module').directive('cmItems', cmItems);
 
     /* @ngInject */
     function cmItems() {
+
         var directive = {
             restrict: "E",
             replace: true,
             templateUrl: 'items.html',
-            scope:true
+            compile: function compile(tElement, iAttrs) {
+                return {
+                    post: function (scope, iElement, iAttrs) {
+                    }
+                };
+
+            },
+            scope: {
+                'vm': '=',
+                'data': '=',
+                'colNumber': '@'
+            }
         };
         return directive;
+    }
+}());
+
+(function () {
+    angular.module('app.drop-order.module').directive('cmItemsHeader', cmItemsHeader);
+
+    /* @ngInject */
+    function cmItemsHeader() {
+        var templateHTML =
+            '<div class="panel-heading">'
+                + '<ul class="panel-title">'
+                    + '<li ng-repeat="title in titles" class="col-md-{{colNumber}}">'
+                      + '{{title}}'
+                    + '</li>'
+                + '<span class="clearfix"></span>'
+                + '</ul>'
+            + '</div>';
+
+        var directive = {
+            restrict: "E",
+            replace: true,
+            template: templateHTML,
+            link: linkFn,
+            scope: {
+                'titles': '=',
+                'colNumber':'@'
+            }
+        };
+
+        function linkFn(scope, element, attr) {
+
+        }
+        return directive;
+
     }
 }());
 
@@ -498,41 +525,8 @@ angular.module('app').
 
     /* @ngInject */
     function Items($scope, $rootScope, dataservices, eventServices) {
-
     }
     Items.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
-
-}());
-(function () {
-    angular.module('app.drop-order.module').directive('cmPrinter', printerDirective);
-
-    /* @ngInject */
-    function printerDirective() {
-        var directive = {
-            restrict: "E",
-            replace: true,
-            templateUrl: 'printer.html',
-            scope:true
-            //, controller:"itemsCtrl"
-        };
-        return directive;
-
-    }
-}());
-
-(function () {
-    angular.module('app.drop-order.module')
-        .controller('Printer', Printer);
-
-    /* @ngInject */
-    function Printer($scope, $rootScope, dataservices, eventServices) {
-        //var vm = this;
-        //dataservices.getItems().then(function(response){
-        //    vm.ordersPrinter = response.data;
-        //});
-
-    }
-    Printer.$inject = ["$scope", "$rootScope", "dataservices", "eventServices"];
 
 }());
 /**

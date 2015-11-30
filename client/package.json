@@ -21,6 +21,7 @@
   },
   "devDependencies": {
     "gulp-angular-templatecache": "^1.8.0",
+    "gulp-less-sourcemap": "^1.4.2",
     "gulp-templatecache": "0.0.4",
     "gulp-useref": "^3.0.0",
     "gulp-watch": "^4.3.5"

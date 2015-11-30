@@ -4,7 +4,6 @@
         <li role="presentation"
             ng-repeat="panel in panels"
             ng-class="{active: $state.includes('{{panel.link}}')}">
-
             <a ui-sref="{{panel.link}}">
                 {{panel.name}}
             </a>

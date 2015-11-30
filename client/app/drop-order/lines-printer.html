@@ -1,0 +1,17 @@
+<div class="panel panel-primary panel-orders">
+    <cm-items-header
+            ng-if="vm.titleLinesPrinter"
+            titles='vm.titleLinesPrinter'
+            col-number="12"
+    >
+    </cm-items-header>
+
+    <ul>
+        <li class="border cursorPointer"
+            ng-repeat="printer in vm.printers">
+            <a ui-sref="dropOrder.printer({id: printer.link})">
+                {{printer.line}}
+            </a>
+        </li>
+    </ul>
+</div>

@@ -4,7 +4,6 @@
 
     /* @ngInject */
     function Items($scope, $rootScope, dataservices, eventServices) {
-
     }
 
 }());

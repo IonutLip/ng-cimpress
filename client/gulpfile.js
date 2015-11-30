@@ -10,7 +10,8 @@ var gulp = require('gulp'),
     del = require('del'),
     rename = require('gulp-rename'),
     templateCache = require('gulp-angular-templatecache'),
-    watch = require('gulp-watch');
+    watch = require('gulp-watch'),
+    less = require('gulp-less-sourcemap');
 
 var src = {
         js: {
@@ -32,7 +33,7 @@ var src = {
         },
         css: {
             custom: [
-                './css/*.css'
+                './css/*.less'
             ],
             libs: [
                 "/bower_components/bootstrap/dist/css/bootstrap.min.css"
@@ -52,9 +53,11 @@ var src = {
     dest = './dest';
 
 gulp.task('css', function () {
-    return gulp.src(src.css.custom)
+   return gulp.src(src.css.custom)
+        .pipe(less())
+        .pipe(concat('style.css'))
         .pipe(minifyCSS())
-        .pipe(gulp.dest(path.join(dest)));
+        .pipe(gulp.dest(path.join(dest+'/css')));
 });
 
 gulp.task('html', function () {
@@ -95,7 +98,7 @@ gulp.task('watch', ['default'], function () {
         [
             './app/**/*.js',
             './app/**/*.html',
-            './css/*.css'
+            './css/*.less'
         ],
         ['default']);
 });

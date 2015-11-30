@@ -1,0 +1,15 @@
+<ul>
+    <li ng-repeat="order in data track by $index"
+        dnd-draggable="order"
+        dnd-moved="vm.moved(order, $index)"
+        class="border cursorPointer"
+    >
+            <span class="col-md-{{colNumber}}">
+                {{order.orderName}}
+            </span>
+            <span class="col-md-{{colNumber}}">
+                {{order.name}}
+            </span>
+        <span class="clearfix"></span>
+    </li>
+</ul>
